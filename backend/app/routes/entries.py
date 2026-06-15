@@ -1,0 +1,32 @@
+"""Tracking endpoints: save a footprint entry and list a device's history."""
+
+from __future__ import annotations
+
+from fastapi import APIRouter, Depends, Path, Query, Request
+
+from app.deps import get_repository
+from app.models import Entry, EntryCreate
+from app.repository.base import EntryRepository
+
+router = APIRouter(prefix="/api/entries", tags=["entries"])
+
+_DEVICE_ID = Path(pattern=r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$")
+
+
+@router.post("", response_model=Entry, status_code=201)
+def create_entry(
+    request: Request, payload: EntryCreate, repo: EntryRepository = Depends(get_repository)
+) -> Entry:
+    """Persist a footprint entry for the (anonymous) device."""
+    return repo.add(payload.device_id, payload.input, payload.result)
+
+
+@router.get("/{device_id}", response_model=list[Entry])
+def list_entries(
+    request: Request,
+    device_id: str = _DEVICE_ID,
+    limit: int = Query(50, ge=1, le=200),
+    repo: EntryRepository = Depends(get_repository),
+) -> list[Entry]:
+    """Return a device's footprint history, newest first."""
+    return repo.list_for_device(device_id, limit=limit)
