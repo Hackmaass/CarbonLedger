@@ -2,9 +2,11 @@
 
 import type { CarbonInput, Entry, FootprintResult, InsightsResponse } from "./types";
 
+const API_URL = import.meta.env.VITE_API_URL || "";
+
 /** POST a JSON body and parse the JSON response, throwing on non-2xx status. */
 async function postJson<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(path, {
+  const res = await fetch(`${API_URL}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -40,7 +42,7 @@ export function getInsights(input: CarbonInput): Promise<InsightsResponse> {
 export async function extractDataFromImage(file: File): Promise<Partial<CarbonInput>> {
   const formData = new FormData();
   formData.append("file", file);
-  const res = await fetch("/api/audit/extract", {
+  const res = await fetch(`${API_URL}/api/audit/extract`, {
     method: "POST",
     body: formData,
   });
@@ -66,7 +68,7 @@ export function saveEntry(
 
 /** List the device's saved entries, newest first. */
 export async function listEntries(deviceId: string): Promise<Entry[]> {
-  const res = await fetch(`/api/entries/${encodeURIComponent(deviceId)}`);
+  const res = await fetch(`${API_URL}/api/entries/${encodeURIComponent(deviceId)}`);
   if (!res.ok) {
     throw new Error(`Failed to load history (${res.status})`);
   }
