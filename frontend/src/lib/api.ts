@@ -5,7 +5,7 @@ import type { CarbonInput, Entry, FootprintResult, InsightsResponse } from "./ty
 const API_URL = import.meta.env.VITE_API_URL || "";
 
 /** POST a JSON body and parse the JSON response, throwing on non-2xx status. */
-async function postJson<T>(path: string, body: unknown): Promise<T> {
+async function postJson<T, B>(path: string, body: B): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -30,12 +30,12 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
 
 /** Compute the annual footprint breakdown for the given lifestyle inputs. */
 export function calculate(input: CarbonInput): Promise<FootprintResult> {
-  return postJson<FootprintResult>("/api/calculate", input);
+  return postJson<FootprintResult, CarbonInput>("/api/calculate", input);
 }
 
 /** Fetch personalized reduction advice (Gemini with rule-based fallback). */
 export function getInsights(input: CarbonInput): Promise<InsightsResponse> {
-  return postJson<InsightsResponse>("/api/insights", input);
+  return postJson<InsightsResponse, CarbonInput>("/api/insights", input);
 }
 
 /** AI Auditor: Extract footprint data from an image of a bill or receipt. */
@@ -59,7 +59,7 @@ export function saveEntry(
   input: CarbonInput,
   result: FootprintResult,
 ): Promise<Entry> {
-  return postJson<Entry>("/api/entries", {
+  return postJson<Entry, { device_id: string; input: CarbonInput; result: FootprintResult }>("/api/entries", {
     device_id: deviceId,
     input,
     result,

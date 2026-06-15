@@ -62,6 +62,7 @@ and must pass before merging:
   includes an automated axe assertion.
 - **Tests first-class:** new behavior ships with tests; coverage thresholds are
   hard CI gates, so untested code fails the build.
+- **Architecture Decisions:** Any major architectural change must be documented as an Architecture Decision Record (ADR) in `docs/adr/`.
 - **No secrets in the repo:** Google Cloud auth is via Application Default
   Credentials only.
 

@@ -33,7 +33,7 @@ class BlockchainAuditService:
         self._mock_ledger: dict[str, str] = {}
         self._next_block = 12500000
 
-    def calculate_report_hash(self, report_data: dict) -> str:
+    def calculate_report_hash(self, report_data: dict[str, object]) -> str:
         """Create a deterministic SHA-256 hash of the report data."""
         # Ensure keys are sorted for consistent hashing.
         serialized = json.dumps(report_data, sort_keys=True)
@@ -53,7 +53,7 @@ class BlockchainAuditService:
             timestamp=datetime.now(timezone.utc).isoformat(),
         )
 
-    def verify_report(self, report_data: dict, tx_hash: str) -> bool:
+    def verify_report(self, report_data: dict[str, object], tx_hash: str) -> bool:
         """Verify that a report matches the hash stored in a transaction."""
         stored_hash = self._mock_ledger.get(tx_hash)
         if not stored_hash:

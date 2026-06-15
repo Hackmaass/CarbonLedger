@@ -15,7 +15,7 @@ const result: FootprintResult = {
   },
 };
 
-function mockFetch(status: number, body: unknown) {
+function mockFetch<B>(status: number, body: B) {
   const fn = vi.fn().mockResolvedValue({
     ok: status >= 200 && status < 300,
     status,
