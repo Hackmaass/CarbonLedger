@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 // In dev, proxy API calls to the FastAPI backend so the SPA and API share an
 // origin (mirroring the single-container production setup).
@@ -18,7 +19,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: "./src/test/setup.ts",
+    setupFiles: [path.resolve(__dirname, "src/test/setup.ts")],
+    exclude: ["src/main.tsx", "src/test/**", "src/**/*.d.ts", "tests/**", "**/*.spec.ts", "node_modules/**", "dist/**"],
     css: false,
     coverage: {
       provider: "v8",

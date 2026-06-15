@@ -126,7 +126,7 @@ Carbon Ledger ensures audit integrity without relying on expensive, carbon-heavy
 The repository relies on the following primary documentation files:
 - `README.md`: Entry point, architecture overview, and setup instructions.
 - `EVALUATION_GUIDE.md`: This document.
-- `SECURITY.md` and `docs/security.md`: Threat vectors and mitigation strategies.
+- `SECURITY.md`: Threat vectors and mitigation strategies.
 - `docs/ARCHITECTURE.md`: Deep dive into component boundaries.
 - `docs/testing.md`: QA strategy and coverage rules.
 - `docs/accessibility.md`: A11y patterns and WCAG AA adherence.

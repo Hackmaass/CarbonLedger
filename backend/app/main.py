@@ -8,6 +8,8 @@ whole platform runs as a single Cloud Run container.
 from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
+import json
+import logging
 from pathlib import Path
 
 from fastapi import FastAPI, Request, Response
@@ -21,8 +23,6 @@ from slowapi.util import get_remote_address
 from app import __version__
 from app.config import get_settings
 from app.routes import audit, calculate, entries, health
-import logging
-import json
 
 class JSONFormatter(logging.Formatter):
     def format(self, record):
